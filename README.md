@@ -164,8 +164,8 @@ The wiki treats the analyst note as an analyst claim, not as ground truth. It su
 ## 60-second demo
 
 ```bash
-git clone https://github.com/abs768/Project-Obsidian.git
-cd Project-Obsidian
+git clone https://github.com/abs768/forensic-llm-wiki.git
+cd forensic-llm-wiki
 
 python3.11 -m venv .venv
 source .venv/bin/activate
