@@ -1,0 +1,88 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "forensic-llm-wiki"
+version = "0.4.0"
+description = "A markdown-first AI investigation wiki that compiles forensic evidence into an evolving, citation-backed case knowledge base."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+authors = [{ name = "Forensic LLM Wiki contributors" }]
+keywords = ["forensics", "llm", "wiki", "obsidian", "rag", "markdown"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+dependencies = [
+    "pydantic>=2.5",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4",
+    "ruff>=0.4",
+]
+live = [
+    "anthropic>=0.30",
+]
+mcp = [
+    "mcp>=1.0",
+]
+
+[project.scripts]
+fw = "fw:main"
+
+[project.urls]
+Documentation = "https://github.com/your-org/forensic-llm-wiki#readme"
+Issues = "https://github.com/your-org/forensic-llm-wiki/issues"
+
+[tool.setuptools]
+py-modules = ["fw"]
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = [
+    "wiki",
+    "wiki_snapshots",
+    "benchmark_results",
+    "examples/obsidian_vault_case_002",
+    ".venv",
+]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "W",   # pycodestyle warnings
+    "I",   # isort
+    "UP",  # pyupgrade
+    "B",   # bugbear
+]
+ignore = [
+    "E501",  # line too long — markdown-rich strings live happily past 100 chars
+    "B008",  # function-call-in-default-argument — Pydantic uses Field(default_factory=...)
+    "UP007", # X | Y vs Optional[X] — both are fine on 3.11+
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["F401", "F811"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = "-ra -q"

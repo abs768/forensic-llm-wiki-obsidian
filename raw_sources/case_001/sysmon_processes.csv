@@ -1,0 +1,7 @@
+timestamp,event_id,parent_image,image,user,command_line
+2025-11-12 10:13:55,1,C:\Windows\explorer.exe,C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe,DESK01\alice,powershell.exe
+2025-11-12 10:14:02,1,C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe,C:\Users\alice\Downloads\setup-installer.exe,DESK01\alice,.\setup-installer.exe /silent
+2025-11-12 10:14:33,1,C:\Users\alice\Downloads\setup-installer.exe,C:\Program Files\DeskRest\DeskRest.exe,DESK01\alice,"C:\Program Files\DeskRest\DeskRest.exe" --install
+2025-11-12 10:15:07,1,C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe,C:\Program Files\DeskRest\DeskRest.exe,DESK01\alice,"C:\Program Files\DeskRest\DeskRest.exe"
+2025-11-12 10:15:09,3,,C:\Program Files\DeskRest\DeskRest.exe,DESK01\alice,outbound TCP 198.51.100.42:443
+2025-11-12 10:22:41,1,C:\Windows\explorer.exe,C:\Windows\System32\cmd.exe,DESK01\alice,cmd.exe /c whoami

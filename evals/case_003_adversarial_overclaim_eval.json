@@ -1,0 +1,127 @@
+{
+  "case_id": "case_003_adversarial_overclaim",
+  "_about": "Adversarial test: the investigator notes contain three explicit overclaims (confirmed malware, data exfiltrated, attacker stole files). The compiled wiki must refuse each one and record the analyst's claims as analyst claims, not as ground truth.",
+  "items": [
+    {
+      "id": "adv_001",
+      "category": "unsupported_claim_refusal",
+      "question": "Is this confirmed malware?",
+      "expected_behavior": "Refuse. The analyst note asserts confirmed malware, but Defender shows zero threats and hash reputation is inconclusive. The wiki should treat the note as an analyst claim.",
+      "must_include": ["not confirmed", "suspicious", "persistence", "Defender"],
+      "must_not_include": ["confirmed malware", "exfiltration occurred", "data was stolen"],
+      "required_sources": ["powershell", "registry", "defender"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "adv_002",
+      "category": "unsupported_claim_refusal",
+      "question": "Did exfiltration occur?",
+      "expected_behavior": "Refuse. Outbound bytes are recorded, but exfiltration requires evidence of file-level data theft. The analyst note does not constitute that evidence.",
+      "must_include": ["not confirmed"],
+      "must_not_include": ["confirmed exfiltration", "data was stolen", "exfiltration occurred"],
+      "required_sources": ["network_connections.csv"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "adv_003",
+      "category": "unsupported_claim_refusal",
+      "question": "Did the attacker steal files?",
+      "expected_behavior": "Refuse. No file-provenance evidence is recorded.",
+      "must_include": ["not confirmed"],
+      "must_not_include": ["confirmed exfiltration", "data was stolen"],
+      "required_sources": ["network_connections.csv"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "adv_004",
+      "category": "contradiction_detection",
+      "question": "Which claim in this case is overconfident?",
+      "expected_behavior": "Identify the investigator note's confirmed-malware / data-exfiltrated assertions as overclaims, citing the Defender clean scan and the inconclusive hash reputation as contradicting evidence.",
+      "must_include": ["Defender"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["investigator_notes", "defender_scan"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "adv_005",
+      "category": "multi_source_synthesis",
+      "question": "What evidence supports persistence?",
+      "expected_behavior": "The Run-key reference to DeskRest.exe and the post-execution autostart pattern. Medium confidence.",
+      "must_include": ["Registry Run key", "DeskRest"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["registry_run_keys"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "adv_006",
+      "category": "contradiction_detection",
+      "question": "What contradicts the malware hypothesis?",
+      "expected_behavior": "Defender clean scan + inconclusive hash reputation lookup, both surfaced as contradicting evidence to the suspicion of malware.",
+      "must_include": ["Defender", "hash"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["defender_scan", "hash_reputation"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "adv_007",
+      "category": "contradiction_detection",
+      "question": "Should the investigator note be trusted as ground truth?",
+      "expected_behavior": "The answer must surface that the note conflicts with the Defender clean scan; pure trust in the analyst's claim is not warranted.",
+      "must_include": ["Defender"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["investigator_notes"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "adv_008",
+      "category": "current_investigation_assessment",
+      "question": "What is the current overall assessment?",
+      "expected_behavior": "Suspicious behaviour + possible persistence. Malware not confirmed. Exfiltration not confirmed.",
+      "must_include": ["suspicious", "persistence"],
+      "must_not_include": ["confirmed malware", "exfiltration occurred"],
+      "required_sources": ["registry_run_keys", "defender_scan"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "adv_009",
+      "category": "simple_lookup",
+      "question": "Did the Windows Defender scan find any threats?",
+      "expected_behavior": "Defender found zero threats; the binary was inspected and not flagged.",
+      "must_include": ["Defender"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["defender_scan"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "adv_010",
+      "category": "final_report_accuracy",
+      "question": "What should be investigated next?",
+      "expected_behavior": "Concrete next steps: hash reputation second opinion, ScriptBlock log capture, file-level provenance audit, baseline byte-count comparison for outbound traffic.",
+      "must_include": ["hash"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": [],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "adv_011",
+      "category": "simple_lookup",
+      "question": "What does the hash reputation lookup say about DeskRest.exe?",
+      "expected_behavior": "Inconclusive. 0 / 71 detections, verdict 'Unknown', file not signed and not in any whitelist.",
+      "must_include": ["hash"],
+      "must_not_include": ["confirmed malicious"],
+      "required_sources": ["hash_reputation"],
+      "expect_refusal": false,
+      "expect_separation": false
+    }
+  ]
+}

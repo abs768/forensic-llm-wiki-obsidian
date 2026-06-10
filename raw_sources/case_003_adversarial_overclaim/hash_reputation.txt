@@ -1,0 +1,12 @@
+Hash Reputation Lookup
+======================
+Target file : C:\Program Files\DeskRest\DeskRest.exe
+SHA-256     : a91bb88e2cfd1234567890abcdef0fedcba9876543210fedcba0987654321aabb
+Source      : VirusTotal-style aggregator
+Detections  : 0 / 71
+Verdict     : Unknown — insufficient telemetry to classify.
+Notes:
+- File is not signed.
+- File is not in any known whitelist.
+- File is not flagged by any AV engine in the corpus.
+- Reputation is inconclusive, NOT confirmed malicious.

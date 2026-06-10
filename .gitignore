@@ -1,0 +1,49 @@
+# --- Python ---
+__pycache__/
+*.pyc
+*.egg-info/
+build/
+dist/
+
+# --- Tooling caches ---
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# --- Virtualenvs ---
+.venv/
+venv/
+
+# --- OS / editor noise ---
+.DS_Store
+.Rhistory
+
+# --- Local config ---
+.env
+
+# --- Generated wiki state ---
+# The compiled markdown for live cases is regenerated on every ingest.
+# Track only the demo Obsidian vault under examples/.
+wiki/cases/*/_state.json
+wiki/cases/*/.fw/
+wiki/cases/case_001/
+wiki/index.md
+wiki/cases/case_002_evolving/
+
+# --- Snapshots are large and per-run ---
+wiki_snapshots/
+
+# --- Benchmark output: track only the demo cases' headline artifacts ---
+benchmark_results/*
+!benchmark_results/case_002_evolving/
+benchmark_results/case_002_evolving/*
+!benchmark_results/case_002_evolving/results.md
+!benchmark_results/case_002_evolving/evolution_report.md
+!benchmark_results/case_002_evolving/method_comparison.md
+!benchmark_results/case_003_adversarial_overclaim/
+benchmark_results/case_003_adversarial_overclaim/*
+!benchmark_results/case_003_adversarial_overclaim/results.md
+
+# Generated wiki state
+wiki/
+wiki_snapshots/

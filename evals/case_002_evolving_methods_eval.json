@@ -1,0 +1,228 @@
+{
+  "case_id": "case_002_evolving",
+  "_about": "Phase 5 four-way method comparison eval. Each item declares the method that *should* answer it best; the benchmark scorecard counts 'expected-best wins' per method.",
+  "items": [
+    {
+      "id": "lookup_001",
+      "category": "simple_lookup",
+      "question": "Did the Windows Defender scan find any threats?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["Defender"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["defender_scan"]
+    },
+    {
+      "id": "lookup_002",
+      "category": "simple_lookup",
+      "question": "What does the hash reputation lookup say about DeskRest.exe?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["hash"],
+      "must_not_include": ["confirmed malicious"],
+      "required_sources": ["hash_reputation"]
+    },
+    {
+      "id": "lookup_003",
+      "category": "simple_lookup",
+      "question": "Are there any outbound network connections?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["203.0.113.77"],
+      "must_not_include": ["no outbound"],
+      "required_sources": ["network_connections.csv"]
+    },
+
+    {
+      "id": "rel_001",
+      "category": "relationship_retrieval",
+      "question": "What is DeskRest.exe related to?",
+      "expected_best_method": "graph_rag_lite",
+      "must_include": ["registry", "powershell"],
+      "must_not_include": ["confirmed malware"]
+    },
+    {
+      "id": "rel_002",
+      "category": "relationship_retrieval",
+      "question": "What relationships does the registry Run key have?",
+      "expected_best_method": "graph_rag_lite",
+      "must_include": ["DeskRest"],
+      "must_not_include": ["confirmed malware"]
+    },
+    {
+      "id": "rel_003",
+      "category": "relationship_retrieval",
+      "question": "What is 203.0.113.77 related to?",
+      "expected_best_method": "graph_rag_lite",
+      "must_include": ["DeskRest"],
+      "must_not_include": ["confirmed malware"]
+    },
+
+    {
+      "id": "multihop_001",
+      "category": "multi_hop_relation",
+      "question": "What links DeskRest.exe to outbound network activity?",
+      "expected_best_method": "hybrid",
+      "must_include": ["203.0.113.77"],
+      "must_not_include": ["confirmed malware"]
+    },
+    {
+      "id": "multihop_002",
+      "category": "multi_hop_relation",
+      "question": "What is connected to the registry Run key through DeskRest.exe?",
+      "expected_best_method": "hybrid",
+      "must_include": ["DeskRest"],
+      "must_not_include": ["confirmed malware"]
+    },
+
+    {
+      "id": "contra_001",
+      "category": "contradiction_detection",
+      "question": "Does the investigator note conflict with other evidence?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["Defender", "Investigator"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["investigator_notes", "defender_scan"]
+    },
+    {
+      "id": "contra_002",
+      "category": "contradiction_detection",
+      "question": "What contradicts the suspicion that DeskRest.exe is malware?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["Defender", "hash"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["defender_scan", "hash_reputation"]
+    },
+    {
+      "id": "contra_003",
+      "category": "contradiction_detection",
+      "question": "Why should the analyst not conclude malware is confirmed?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["not confirmed", "Defender"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["defender_scan"]
+    },
+
+    {
+      "id": "refuse_001",
+      "category": "unsupported_claim_refusal",
+      "question": "Is this confirmed malware?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["not confirmed", "suspicious", "persistence", "Defender"],
+      "must_not_include": ["confirmed malware", "exfiltration occurred"],
+      "required_sources": ["powershell", "registry", "defender"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "refuse_002",
+      "category": "unsupported_claim_refusal",
+      "question": "Did DeskRest.exe definitely steal data?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["not confirmed"],
+      "must_not_include": ["confirmed exfiltration", "data was stolen"],
+      "required_sources": ["network_connections.csv"],
+      "expect_refusal": true
+    },
+    {
+      "id": "refuse_003",
+      "category": "unsupported_claim_refusal",
+      "question": "Has data exfiltration been confirmed?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["not confirmed", "outbound"],
+      "must_not_include": ["confirmed exfiltration", "data was stolen"],
+      "required_sources": ["network_connections.csv"],
+      "expect_refusal": true
+    },
+
+    {
+      "id": "state_001",
+      "category": "current_investigation_assessment",
+      "question": "What is the overall current assessment of this case?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["suspicious", "persistence"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["registry_run_keys", "defender_scan"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "state_002",
+      "category": "current_investigation_assessment",
+      "question": "Is the host compromised?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["not confirmed", "suspicious"],
+      "must_not_include": ["confirmed compromise", "confirmed malware"],
+      "required_sources": ["registry_run_keys", "defender_scan", "hash_reputation"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "state_003",
+      "category": "current_investigation_assessment",
+      "question": "What evidence supports persistence?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["Registry Run key", "DeskRest"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["registry_run_keys"]
+    },
+
+    {
+      "id": "evol_001",
+      "category": "hypothesis_evolution",
+      "question": "How did the assessment change after Defender returned a clean scan?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["Defender"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["defender_scan"]
+    },
+    {
+      "id": "evol_002",
+      "category": "hypothesis_evolution",
+      "question": "Was malware suspected before the hash reputation lookup completed?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["not confirmed"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["investigator_notes"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+
+    {
+      "id": "report_001",
+      "category": "final_report_accuracy",
+      "question": "What should the final report say about this incident?",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["suspicious", "persistence"],
+      "must_not_include": ["confirmed malware", "exfiltration occurred"],
+      "required_sources": ["defender_scan"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "report_002",
+      "category": "final_report_accuracy",
+      "question": "Summarise the case for the final report.",
+      "expected_best_method": "llm_wiki",
+      "must_include": ["suspicious", "persistence"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["registry_run_keys", "defender_scan"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+
+    {
+      "id": "hybrid_001",
+      "category": "hybrid",
+      "question": "Explain the evidence chain and current assessment for DeskRest.exe.",
+      "expected_best_method": "hybrid",
+      "must_include": ["registry", "Defender", "not confirmed"],
+      "must_not_include": ["confirmed malware"]
+    },
+    {
+      "id": "hybrid_002",
+      "category": "hybrid",
+      "question": "Show the relationships around DeskRest.exe and tell me whether malware is confirmed.",
+      "expected_best_method": "hybrid",
+      "must_include": ["registry", "not confirmed"],
+      "must_not_include": ["confirmed malware"]
+    }
+  ]
+}

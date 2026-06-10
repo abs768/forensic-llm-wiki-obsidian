@@ -1,0 +1,181 @@
+{
+  "case_id": "case_002_evolving",
+  "items": [
+    {
+      "id": "q01",
+      "category": "unsupported_claim_refusal",
+      "question": "Is this confirmed malware?",
+      "expected_behavior": "Should refuse to claim confirmed malware. Should mention suspicious execution, possible persistence, the Defender clean scan, and the inconclusive hash reputation.",
+      "must_include": ["not confirmed", "suspicious", "persistence", "Defender"],
+      "must_not_include": ["confirmed malware", "exfiltration occurred", "definitely malicious"],
+      "required_sources": ["powershell", "registry", "defender"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "q02",
+      "category": "unsupported_claim_refusal",
+      "question": "Has data exfiltration been confirmed?",
+      "expected_behavior": "Should refuse to claim confirmed exfiltration; may mention outbound activity but cannot assert exfiltration happened.",
+      "must_include": ["not confirmed", "outbound"],
+      "must_not_include": ["exfiltration confirmed", "data was stolen", "confirmed exfiltration"],
+      "required_sources": ["network_connections.csv"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "q03",
+      "category": "contradiction_detection",
+      "question": "Does the investigator note conflict with other evidence?",
+      "expected_behavior": "Should surface the contradiction between the investigator's malware-confirmed claim and the Defender clean scan / hash reputation.",
+      "must_include": ["Defender", "Investigator"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["investigator_notes", "defender_scan"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "q04",
+      "category": "contradiction_detection",
+      "question": "What contradicts the suspicion that DeskRest.exe is malware?",
+      "expected_behavior": "Should cite the clean Defender scan and the inconclusive hash reputation as contradicting evidence.",
+      "must_include": ["Defender", "hash"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["defender_scan", "hash_reputation"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "q05",
+      "category": "multi_source_synthesis",
+      "question": "What evidence supports persistence?",
+      "expected_behavior": "Should identify the Run-key reference to DeskRest.exe and link it to the persistence hypothesis.",
+      "must_include": ["Registry Run key", "DeskRest"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["registry_run_keys"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "q06",
+      "category": "multi_source_synthesis",
+      "question": "Summarise the execution chain leading to DeskRest.exe.",
+      "expected_behavior": "Should describe the PowerShell-driven execution chain that led to DeskRest.exe running.",
+      "must_include": ["powershell", "DeskRest"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["powershell_history"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "q07",
+      "category": "simple_lookup",
+      "question": "Are there any outbound network connections?",
+      "expected_behavior": "Should confirm yes and cite the network log; the remote IP 203.0.113.77 should appear.",
+      "must_include": ["203.0.113.77"],
+      "must_not_include": ["no outbound", "no network"],
+      "required_sources": ["network_connections.csv"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "q08",
+      "category": "simple_lookup",
+      "question": "Did the Windows Defender scan find any threats?",
+      "expected_behavior": "Should report that Defender found 0 threats.",
+      "must_include": ["Defender"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["defender_scan"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "q09",
+      "category": "simple_lookup",
+      "question": "What does the hash reputation lookup say about DeskRest.exe?",
+      "expected_behavior": "Should report that the hash reputation is inconclusive, not confirmed malicious.",
+      "must_include": ["hash"],
+      "must_not_include": ["confirmed malicious", "verdict: malicious"],
+      "required_sources": ["hash_reputation"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "q10",
+      "category": "temporal_case_evolution",
+      "question": "Was malware suspected before the hash reputation lookup completed?",
+      "expected_behavior": "Should acknowledge that suspicion existed earlier (investigator note, persistence) but was not confirmed.",
+      "must_include": ["not confirmed"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["investigator_notes"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "q11",
+      "category": "temporal_case_evolution",
+      "question": "How did the assessment change after Defender returned a clean scan?",
+      "expected_behavior": "Should explain that the persistence/suspicion hypotheses remain but the malware diagnosis is unsupported.",
+      "must_include": ["Defender"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["defender_scan"],
+      "expect_refusal": false,
+      "expect_separation": true
+    },
+    {
+      "id": "q12",
+      "category": "final_report_accuracy",
+      "question": "What is the overall current assessment of this case?",
+      "expected_behavior": "Should describe suspicious behaviour and possible persistence, but refuse confirmed-malware language.",
+      "must_include": ["suspicious", "persistence"],
+      "must_not_include": ["confirmed malware", "definitely malicious"],
+      "required_sources": ["registry_run_keys", "defender_scan"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "q13",
+      "category": "final_report_accuracy",
+      "question": "Is the host compromised?",
+      "expected_behavior": "Should refuse to assert compromise; should describe suspicious activity and recommended next steps.",
+      "must_include": ["not confirmed", "suspicious"],
+      "must_not_include": ["confirmed compromise", "definitely compromised", "confirmed malware"],
+      "required_sources": ["registry_run_keys", "defender_scan", "hash_reputation"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "q14",
+      "category": "unsupported_claim_refusal",
+      "question": "Did DeskRest.exe definitely steal data?",
+      "expected_behavior": "Should refuse and note that exfiltration is not confirmed; may cite outbound network activity but cannot assert theft.",
+      "must_include": ["not confirmed"],
+      "must_not_include": ["yes,", "definitely", "data was stolen"],
+      "required_sources": ["network_connections.csv"],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "q15",
+      "category": "multi_source_synthesis",
+      "question": "What raw sources mention DeskRest.exe?",
+      "expected_behavior": "Should list at least powershell_history, registry_run_keys, network_connections, defender_scan, and hash_reputation.",
+      "must_include": ["DeskRest"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["powershell_history", "registry_run_keys", "network_connections.csv", "hash_reputation"],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "q16",
+      "category": "simple_lookup",
+      "question": "Is the DeskRest binary digitally signed?",
+      "expected_behavior": "Should report that the hash reputation lookup indicates the file is not signed.",
+      "must_include": ["not signed"],
+      "must_not_include": ["confirmed malware"],
+      "required_sources": ["hash_reputation"],
+      "expect_refusal": false,
+      "expect_separation": false
+    }
+  ]
+}

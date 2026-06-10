@@ -1,0 +1,7 @@
+Get-Process
+cd C:\Users\charlie\Downloads
+.\DeskRest-installer.exe /quiet
+Get-ChildItem -Recurse "C:\Program Files\DeskRest"
+Start-Process "C:\Program Files\DeskRest\DeskRest.exe"
+whoami
+exit

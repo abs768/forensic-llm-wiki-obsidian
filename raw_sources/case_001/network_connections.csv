@@ -1,0 +1,5 @@
+timestamp,local_address,local_port,remote_address,remote_port,protocol,process,bytes_sent,bytes_received
+2025-11-12 10:15:09,10.0.1.42,53241,198.51.100.42,443,TCP,DeskRest.exe,1284,4096
+2025-11-12 10:15:14,10.0.1.42,53241,198.51.100.42,443,TCP,DeskRest.exe,512,256
+2025-11-12 10:16:02,10.0.1.42,53272,8.8.8.8,53,UDP,svchost.exe,72,96
+2025-11-12 10:22:41,10.0.1.42,53301,52.96.165.18,443,TCP,outlook.exe,2048,8192

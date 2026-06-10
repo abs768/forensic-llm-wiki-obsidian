@@ -1,0 +1,13 @@
+Windows Defender Scan Report
+============================
+Scan Type    : Full Scan
+Started      : 2025-11-12 11:02:11
+Completed    : 2025-11-12 11:48:53
+Files Scanned: 412,884
+Threats Found: 0
+Status       : No threats detected.
+
+Notes:
+- Signature DB version: 1.413.1259.0
+- DeskRest.exe was inspected and not flagged.
+- No suspicious behaviour reported during scan.

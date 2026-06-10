@@ -1,0 +1,8 @@
+Get-Process
+cd C:\Users\erin\Downloads
+.\DeskRest-installer.exe /quiet
+Get-ChildItem -Recurse "C:\Program Files\DeskRest"
+Start-Process "C:\Program Files\DeskRest\DeskRest.exe"
+whoami
+Get-NetTCPConnection | Where-Object State -eq Established
+exit

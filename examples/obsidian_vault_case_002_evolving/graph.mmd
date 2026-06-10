@@ -1,0 +1,81 @@
+graph TD
+    file_DeskRest_installer_exe["DeskRest-installer.exe<br/><i>file</i>"]
+    source_raw_sources_case_002_evolving_step_01_powershell_powershell_history_txt["powershell_history.txt<br/><i>source</i>"]
+    file_DeskRest_exe["DeskRest.exe<br/><i>file</i>"]
+    source_raw_sources_case_002_evolving_step_02_registry_registry_run_keys_reg["registry_run_keys.reg<br/><i>source</i>"]
+    source_raw_sources_case_002_evolving_step_03_defender_defender_scan_txt["defender_scan.txt<br/><i>source</i>"]
+    source_raw_sources_case_002_evolving_step_06_hash_reputation_hash_reputation_txt["hash_reputation.txt<br/><i>source</i>"]
+    registry_key_HKEY_CURRENT_USER_Software_Microsoft_Windows_CurrentVersion_Run["HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run<br/><i>registry_key</i>"]
+    file_OneDrive_exe["OneDrive.exe<br/><i>file</i>"]
+    registry_key_HKEY_LOCAL_MACHINE_Software_Microsoft_Windows_CurrentVersion_Run["HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run<br/><i>registry_key</i>"]
+    file_SecurityHealthSystray_exe["SecurityHealthSystray.exe<br/><i>file</i>"]
+    user_HKEY_CURRENT_USER_Software["HKEY_CURRENT_USER\Software<br/><i>user</i>"]
+    user_HKEY_LOCAL_MACHINE_Software["HKEY_LOCAL_MACHINE\Software<br/><i>user</i>"]
+    ip_address_203_0_113_77["203.0.113.77<br/><i>ip_address</i>"]
+    source_raw_sources_case_002_evolving_step_04_network_network_connections_csv["network_connections.csv<br/><i>source</i>"]
+    ip_address_10_0_4_18["10.0.4.18<br/><i>ip_address</i>"]
+    process_DeskRest_exe["DeskRest.exe<br/><i>process</i>"]
+    ip_address_8_8_8_8["8.8.8.8<br/><i>ip_address</i>"]
+    process_svchost_exe["svchost.exe<br/><i>process</i>"]
+    source_raw_sources_case_002_evolving_step_05_investigator_note_investigator_notes_md["investigator_notes.md<br/><i>source</i>"]
+    claim_0001["Possible Registry-Based Persistence: Run-key entries cause the referenced binary<br/><i>hypothesis</i>"]
+    claim_0002["Possible Outbound C2 Beacon: A non-browser process connecting to an unfamiliar p<br/><i>hypothesis</i>"]
+    file_DeskRest_installer_exe -->|mentioned_in| source_raw_sources_case_002_evolving_step_01_powershell_powershell_history_txt
+    file_DeskRest_exe -->|mentioned_in| source_raw_sources_case_002_evolving_step_01_powershell_powershell_history_txt
+    file_DeskRest_exe -->|mentioned_in| source_raw_sources_case_002_evolving_step_02_registry_registry_run_keys_reg
+    file_DeskRest_exe -->|mentioned_in| source_raw_sources_case_002_evolving_step_03_defender_defender_scan_txt
+    file_DeskRest_exe -->|mentioned_in| source_raw_sources_case_002_evolving_step_06_hash_reputation_hash_reputation_txt
+    registry_key_HKEY_CURRENT_USER_Software_Microsoft_Windows_CurrentVersion_Run -->|mentioned_in| source_raw_sources_case_002_evolving_step_02_registry_registry_run_keys_reg
+    file_OneDrive_exe -->|mentioned_in| source_raw_sources_case_002_evolving_step_02_registry_registry_run_keys_reg
+    registry_key_HKEY_LOCAL_MACHINE_Software_Microsoft_Windows_CurrentVersion_Run -->|mentioned_in| source_raw_sources_case_002_evolving_step_02_registry_registry_run_keys_reg
+    file_SecurityHealthSystray_exe -->|mentioned_in| source_raw_sources_case_002_evolving_step_02_registry_registry_run_keys_reg
+    user_HKEY_CURRENT_USER_Software -->|mentioned_in| source_raw_sources_case_002_evolving_step_02_registry_registry_run_keys_reg
+    user_HKEY_LOCAL_MACHINE_Software -->|mentioned_in| source_raw_sources_case_002_evolving_step_02_registry_registry_run_keys_reg
+    ip_address_203_0_113_77 -->|mentioned_in| source_raw_sources_case_002_evolving_step_04_network_network_connections_csv
+    ip_address_10_0_4_18 -->|mentioned_in| source_raw_sources_case_002_evolving_step_04_network_network_connections_csv
+    process_DeskRest_exe -->|mentioned_in| source_raw_sources_case_002_evolving_step_04_network_network_connections_csv
+    ip_address_8_8_8_8 -->|mentioned_in| source_raw_sources_case_002_evolving_step_04_network_network_connections_csv
+    process_svchost_exe -->|mentioned_in| source_raw_sources_case_002_evolving_step_04_network_network_connections_csv
+    file_DeskRest_installer_exe -->|related_to| file_DeskRest_exe
+    file_DeskRest_exe -->|related_to| file_OneDrive_exe
+    file_DeskRest_exe -->|related_to| file_SecurityHealthSystray_exe
+    file_DeskRest_exe -->|related_to| registry_key_HKEY_CURRENT_USER_Software_Microsoft_Windows_CurrentVersion_Run
+    file_DeskRest_exe -->|related_to| registry_key_HKEY_LOCAL_MACHINE_Software_Microsoft_Windows_CurrentVersion_Run
+    file_DeskRest_exe -->|related_to| user_HKEY_CURRENT_USER_Software
+    file_DeskRest_exe -->|related_to| user_HKEY_LOCAL_MACHINE_Software
+    file_OneDrive_exe -->|related_to| file_SecurityHealthSystray_exe
+    file_OneDrive_exe -->|related_to| registry_key_HKEY_CURRENT_USER_Software_Microsoft_Windows_CurrentVersion_Run
+    file_OneDrive_exe -->|related_to| registry_key_HKEY_LOCAL_MACHINE_Software_Microsoft_Windows_CurrentVersion_Run
+    file_OneDrive_exe -->|related_to| user_HKEY_CURRENT_USER_Software
+    file_OneDrive_exe -->|related_to| user_HKEY_LOCAL_MACHINE_Software
+    file_SecurityHealthSystray_exe -->|related_to| registry_key_HKEY_CURRENT_USER_Software_Microsoft_Windows_CurrentVersion_Run
+    file_SecurityHealthSystray_exe -->|related_to| registry_key_HKEY_LOCAL_MACHINE_Software_Microsoft_Windows_CurrentVersion_Run
+    file_SecurityHealthSystray_exe -->|related_to| user_HKEY_CURRENT_USER_Software
+    file_SecurityHealthSystray_exe -->|related_to| user_HKEY_LOCAL_MACHINE_Software
+    registry_key_HKEY_CURRENT_USER_Software_Microsoft_Windows_CurrentVersion_Run -->|related_to| registry_key_HKEY_LOCAL_MACHINE_Software_Microsoft_Windows_CurrentVersion_Run
+    registry_key_HKEY_CURRENT_USER_Software_Microsoft_Windows_CurrentVersion_Run -->|related_to| user_HKEY_CURRENT_USER_Software
+    registry_key_HKEY_CURRENT_USER_Software_Microsoft_Windows_CurrentVersion_Run -->|related_to| user_HKEY_LOCAL_MACHINE_Software
+    registry_key_HKEY_LOCAL_MACHINE_Software_Microsoft_Windows_CurrentVersion_Run -->|related_to| user_HKEY_CURRENT_USER_Software
+    registry_key_HKEY_LOCAL_MACHINE_Software_Microsoft_Windows_CurrentVersion_Run -->|related_to| user_HKEY_LOCAL_MACHINE_Software
+    user_HKEY_CURRENT_USER_Software -->|related_to| user_HKEY_LOCAL_MACHINE_Software
+    ip_address_10_0_4_18 -->|related_to| ip_address_203_0_113_77
+    ip_address_10_0_4_18 -->|related_to| ip_address_8_8_8_8
+    ip_address_10_0_4_18 -->|related_to| process_DeskRest_exe
+    ip_address_10_0_4_18 -->|related_to| process_svchost_exe
+    ip_address_203_0_113_77 -->|related_to| ip_address_8_8_8_8
+    ip_address_203_0_113_77 -->|related_to| process_DeskRest_exe
+    ip_address_203_0_113_77 -->|related_to| process_svchost_exe
+    ip_address_8_8_8_8 -->|related_to| process_DeskRest_exe
+    ip_address_8_8_8_8 -->|related_to| process_svchost_exe
+    process_DeskRest_exe -->|related_to| process_svchost_exe
+    registry_key_HKEY_CURRENT_USER_Software_Microsoft_Windows_CurrentVersion_Run -->|references| file_OneDrive_exe
+    registry_key_HKEY_CURRENT_USER_Software_Microsoft_Windows_CurrentVersion_Run -->|references| file_DeskRest_exe
+    registry_key_HKEY_LOCAL_MACHINE_Software_Microsoft_Windows_CurrentVersion_Run -->|references| file_SecurityHealthSystray_exe
+    process_DeskRest_exe -->|connected_to| ip_address_203_0_113_77
+    process_svchost_exe -->|connected_to| ip_address_8_8_8_8
+    claim_0001 -->|supports| source_raw_sources_case_002_evolving_step_02_registry_registry_run_keys_reg
+    claim_0001 -->|contradicts| source_raw_sources_case_002_evolving_step_03_defender_defender_scan_txt
+    claim_0001 -->|contradicts| source_raw_sources_case_002_evolving_step_06_hash_reputation_hash_reputation_txt
+    claim_0002 -->|supports| source_raw_sources_case_002_evolving_step_04_network_network_connections_csv
+    claim_0002 -->|contradicts| source_raw_sources_case_002_evolving_step_03_defender_defender_scan_txt
+    claim_0002 -->|contradicts| source_raw_sources_case_002_evolving_step_06_hash_reputation_hash_reputation_txt

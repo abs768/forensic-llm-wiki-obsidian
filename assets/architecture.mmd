@@ -1,0 +1,17 @@
+flowchart TD
+    R[Raw Sources<br/>immutable evidence] --> I[Ingest]
+    S[Schema<br/>rules + templates + lint] --> I
+    I --> D[Structured Indexes<br/>events / entities / claims / graph]
+    I --> W[Markdown Wiki<br/>timeline / entities / iocs /<br/>hypotheses / contradictions /<br/>open_questions / final_report]
+    W --> Q[Query]
+    W --> L[Lint]
+    W --> P[Report]
+    W --> M[MCP Server]
+    W --> O[Obsidian Export]
+    D --> Q
+    D --> L
+    Q --> A[Evidence-backed Answer]
+    L --> X[Unsupported Claims /<br/>Contradictions]
+    P --> Y[Final Report Draft]
+    M --> AG[Agents]
+    O --> H[Humans]

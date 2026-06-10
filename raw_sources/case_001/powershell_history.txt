@@ -1,0 +1,9 @@
+Get-Process
+cd C:\Users\alice\Downloads
+.\setup-installer.exe /silent
+Get-ChildItem -Recurse "C:\Program Files\DeskRest"
+Start-Process "C:\Program Files\DeskRest\DeskRest.exe"
+$env:USERPROFILE
+whoami
+Get-NetTCPConnection | Where-Object State -eq Established
+exit

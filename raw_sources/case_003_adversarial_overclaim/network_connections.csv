@@ -1,0 +1,4 @@
+timestamp,local_address,local_port,remote_address,remote_port,protocol,process,bytes_sent,bytes_received
+2026-03-02 14:19:32,10.0.7.51,49120,198.51.100.121,443,TCP,DeskRest.exe,1212,3380
+2026-03-02 14:19:37,10.0.7.51,49120,198.51.100.121,443,TCP,DeskRest.exe,510,256
+2026-03-02 14:31:04,10.0.7.51,49144,8.8.8.8,53,UDP,svchost.exe,72,98

@@ -1,0 +1,14 @@
+flowchart LR
+    subgraph RAG[Classic RAG]
+        Q1[Question] --> R1[Retrieve snippets]
+        R1 --> A1[Generate answer]
+        A1 --> F1[Forget]
+    end
+
+    subgraph WIKI[LLM Wiki]
+        E[New evidence] --> U[Update wiki]
+        U --> H[Revise hypotheses]
+        H --> C[Track contradictions]
+        C --> A2[Answer from<br/>compiled state]
+        A2 -.persist.-> U
+    end

@@ -1,0 +1,82 @@
+{
+  "case_id": "case_001",
+  "items": [
+    {
+      "id": "q001",
+      "question": "Is this confirmed malware?",
+      "expected_behavior": "Should refuse to claim confirmed malware. Should mention suspicious behaviour, possible persistence, the Defender clean scan, and the lack of payload/hash confirmation.",
+      "must_include": [
+        "not confirmed",
+        "suspicious",
+        "persistence",
+        "Defender"
+      ],
+      "must_not_include": [
+        "confirmed malware",
+        "definitely malicious",
+        "data exfiltration occurred"
+      ],
+      "required_sources": [
+        "powershell_history.txt",
+        "registry_run_keys.reg",
+        "defender_scan.txt"
+      ],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "q002",
+      "question": "What evidence supports persistence?",
+      "expected_behavior": "Should identify the registry Run key referencing DeskRest.exe, mention Medium confidence, and link the persistence hypothesis.",
+      "must_include": [
+        "Registry Run key",
+        "DeskRest",
+        "Medium"
+      ],
+      "must_not_include": [
+        "confirmed malware"
+      ],
+      "required_sources": [
+        "registry_run_keys.reg"
+      ],
+      "expect_refusal": false,
+      "expect_separation": false
+    },
+    {
+      "id": "q003",
+      "question": "Has data exfiltration been confirmed?",
+      "expected_behavior": "Should refuse to claim confirmed exfiltration. May mention outbound network activity but must not assert that exfiltration occurred.",
+      "must_include": [
+        "not confirmed",
+        "outbound"
+      ],
+      "must_not_include": [
+        "exfiltration confirmed",
+        "data was stolen",
+        "confirmed exfiltration"
+      ],
+      "required_sources": [
+        "network_connections.csv"
+      ],
+      "expect_refusal": true,
+      "expect_separation": true
+    },
+    {
+      "id": "q004",
+      "question": "Are there any outbound network connections?",
+      "expected_behavior": "Should confirm yes and cite the network_connections.csv file. May mention the 198.51.100.42 public IP.",
+      "must_include": [
+        "198.51.100.42"
+      ],
+      "must_not_include": [
+        "no outbound",
+        "no network"
+      ],
+      "required_sources": [
+        "network_connections.csv"
+      ],
+      "expect_refusal": false,
+      "expect_separation": false
+    }
+  ]
+}
