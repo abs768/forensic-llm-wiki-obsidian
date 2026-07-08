@@ -1,9 +1,11 @@
-"""Four-way comparator: raw RAG, GraphRAG-lite, LLM Wiki, hybrid.
+"""Five-way comparator: raw RAG, vector RAG, GraphRAG-lite, LLM Wiki, hybrid.
 
-The point is pedagogical. Print all four answers in one terminal so the
+The point is pedagogical. Print all five answers in one terminal so the
 reader can see *what each method is good at*:
 
-  - Raw RAG returns matching snippets.
+  - Raw RAG returns keyword-matching snippets.
+  - Vector RAG returns embedding-similar snippets (better retrieval,
+    same architecture).
   - GraphRAG-lite enumerates relationships.
   - LLM Wiki returns the compiled assessment with refusal discipline.
   - Hybrid combines the wiki's assessment with the graph's relationship
@@ -18,24 +20,27 @@ from .graph.graph_query import graph_query, load_graph
 from .query import answer_question, format_answer
 from .rag import rag_query
 from .schemas import Graph, QueryAnswer
+from .vector_rag import vector_rag_query
 
 
 @dataclass
-class FourWay:
+class MethodComparison:
     question: str
     raw_rag: QueryAnswer
+    vector_rag: QueryAnswer
     graph_rag_lite: QueryAnswer
     llm_wiki: QueryAnswer
     hybrid: QueryAnswer
 
 
-def compare_all(project_root: Path, case_id: str, question: str) -> FourWay:
+def compare_all(project_root: Path, case_id: str, question: str) -> MethodComparison:
     raw = rag_query(project_root, case_id, question)
+    vec = vector_rag_query(project_root, case_id, question)
     gph = graph_query(project_root, case_id, question)
     wiki = answer_question(project_root, case_id, question)
     hybrid = build_hybrid_answer(project_root, case_id, question, wiki, gph)
-    return FourWay(question=question, raw_rag=raw, graph_rag_lite=gph,
-                   llm_wiki=wiki, hybrid=hybrid)
+    return MethodComparison(question=question, raw_rag=raw, vector_rag=vec,
+                            graph_rag_lite=gph, llm_wiki=wiki, hybrid=hybrid)
 
 
 def build_hybrid_answer(
@@ -132,7 +137,7 @@ def _gather_related_entities(graph: Graph, *, interest_text: str) -> str:
     return "\n".join(blocks)
 
 
-def format_four_way(c: FourWay) -> str:
+def format_all_methods(c: MethodComparison) -> str:
     bar = "=" * 78
     out: list[str] = []
     out.append(bar)
@@ -143,21 +148,26 @@ def format_four_way(c: FourWay) -> str:
     out.append("-" * 78)
     out.append(format_answer(c.raw_rag))
     out.append("")
-    out.append("[2] GraphRAG-lite Answer")
+    out.append("[2] Vector RAG Answer")
+    out.append("-" * 78)
+    out.append(format_answer(c.vector_rag))
+    out.append("")
+    out.append("[3] GraphRAG-lite Answer")
     out.append("-" * 78)
     out.append(format_answer(c.graph_rag_lite))
     out.append("")
-    out.append("[3] LLM Wiki Answer")
+    out.append("[4] LLM Wiki Answer")
     out.append("-" * 78)
     out.append(format_answer(c.llm_wiki))
     out.append("")
-    out.append("[4] Hybrid Wiki + Graph Answer")
+    out.append("[5] Hybrid Wiki + Graph Answer")
     out.append("-" * 78)
     out.append(format_answer(c.hybrid))
     out.append("")
     out.append(bar)
     out.append("Takeaway:")
-    out.append("  - Raw RAG retrieves snippets.")
+    out.append("  - Raw RAG retrieves keyword-matching snippets.")
+    out.append("  - Vector RAG retrieves embedding-similar snippets; still no synthesis.")
     out.append("  - GraphRAG-lite shows relationships.")
     out.append("  - LLM Wiki gives the current investigation assessment.")
     out.append("  - Hybrid combines relationship structure with maintained case state.")

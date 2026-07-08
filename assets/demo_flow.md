@@ -33,7 +33,7 @@ command and a one-sentence explanation.
 4. `benchmark_results/case_002_evolving/results.md` — the two-way
    scorecard with real numbers.
 5. `benchmark_results/case_002_evolving/method_comparison.md` — the
-   four-way scorecard.
+   five-way scorecard.
 6. `CASE_STUDY.md` — full narrative.
 7. `docs/threats_to_validity.md` — honest limits.
 

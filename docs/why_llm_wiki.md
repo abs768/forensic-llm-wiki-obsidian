@@ -82,8 +82,8 @@ From `case_002_evolving`, the question *"Is this confirmed malware?"*:
 - **Hybrid** prints the wiki's assessment first and then attaches the
   graph's relationship context as a footer. Best of both.
 
-The included method benchmark scores these four providers across 23
-questions. On this synthetic case, the wiki and hybrid lead the
+The included method benchmark scores these providers — plus an
+embedding-based Vector RAG control — across 23 questions. On this synthetic case, the wiki and hybrid lead the
 categories that require synthesis or refusal; the graph leads
 relationship coverage cleanly. That is the intended outcome — see
 `docs/threats_to_validity.md` for what these numbers do and do not

@@ -3,8 +3,8 @@
 A markdown-first AI investigation system that compiles raw forensic
 evidence into an evolving, citation-backed case wiki — and a
 deterministic benchmark that compares it against a raw lexical RAG
-baseline, a GraphRAG-lite relationship-graph baseline, and a Hybrid
-that combines both.
+baseline, an embedding-based vector RAG baseline, a GraphRAG-lite
+relationship-graph baseline, and a Hybrid that combines wiki and graph.
 
 > **RAG retrieves. GraphRAG relates. LLM Wiki maintains evolving
 > case state. Hybrid combines them.**
@@ -37,9 +37,13 @@ as a foil. On the included `case_002_evolving` benchmark, asked
 - It has no notion of confidence, no contradictions ledger, no refusal
   discipline.
 
-The baseline is deliberately simple. Even a vector-RAG with embeddings
-would still lack the synthesis layer; the gap on synthesis / refusal
-questions is structural, not a retrieval-quality artefact.
+The lexical baseline is deliberately simple, so the project also ships
+a vector-RAG baseline (`fw.py vector-query`, real MiniLM embeddings in
+the committed scorecard) as the stronger control. Better retrieval
+lifts it from 7 / 23 to 10 / 23 on the method benchmark — and the
+refusal and narrative-state gaps against the wiki barely move. The gap
+on synthesis / refusal questions is structural, not a retrieval-quality
+artefact.
 
 ## Why GraphRAG alone is not enough
 
@@ -133,8 +137,8 @@ after_step_03_defender` shows the literal moment the wiki softens its
 assessment after the Defender clean scan lands.
 
 In the 23-question method benchmark on the same case, **Hybrid passed
-20 / 23, LLM Wiki passed 19 / 23, Raw RAG passed 7 / 23, and
-GraphRAG-lite passed 5 / 23.** GraphRAG-lite performed best on its
+20 / 23, LLM Wiki passed 19 / 23, Vector RAG passed 10 / 23, Raw RAG
+passed 7 / 23, and GraphRAG-lite passed 5 / 23.** GraphRAG-lite performed best on its
 intended niche — relationship questions. LLM Wiki performed better on
 contradiction tracking, refusal, and current investigation
 assessment. Hybrid performed best overall. These results are scoped
@@ -219,7 +223,7 @@ analyst's overclaim.
   `--dry-run` previews unified diffs without writing.
 - **Stable IDs for events / entities / claims** across re-ingest so
   citations from the final report don't break.
-- **186 tests** across 21 files, all in mock mode. `pytest` runs in
+- **197 tests** across 22 files, all in mock mode. `pytest` runs in
   ~6 s. **Ruff clean.** **CI on Python 3.11 and 3.12** via GitHub
   Actions: `ruff check`, `pytest`, plus a smoke test of the demo flow.
 - **Path traversal blocked.** The MCP `read_wiki_page` tool resolves
@@ -323,11 +327,11 @@ Specific friction points:
 git clone <repo> && cd forensic-llm-wiki
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
-pytest                                             # 186 tests, mock mode
+pytest                                             # 197 tests, mock mode
 ruff check .
 python fw.py evolve case_002_evolving              # eval climbs 2 → 16
 python fw.py benchmark case_002_evolving           # two-way scorecard
-python fw.py benchmark-methods case_002_evolving   # four-way scorecard
+python fw.py benchmark-methods case_002_evolving   # five-way scorecard
 python fw.py ingest raw_sources/case_003_adversarial_overclaim --apply
 python fw.py benchmark case_003_adversarial_overclaim
 python fw.py compare-all case_002_evolving "Is this confirmed malware?"

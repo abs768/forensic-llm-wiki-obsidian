@@ -2,15 +2,16 @@
 
 This project demonstrates an architectural pattern — a markdown-first
 LLM Wiki for forensic-style investigation — and benchmarks it against
-two simple baselines. The benchmark numbers in `benchmark_results/`
+three simple baselines. The benchmark numbers in `benchmark_results/`
 are real and reproducible. They should not be over-read. This page
 lists the honest limits.
 
 > This project does not claim that LLM Wiki universally beats RAG or
 > GraphRAG. It shows that, on a synthetic evolving forensic benchmark,
-> a maintained markdown wiki can outperform a raw lexical RAG baseline
-> and a deterministic GraphRAG-lite graph baseline on contradiction
-> tracking, refusal accuracy, and narrative state maintenance.
+> a maintained markdown wiki can outperform a raw lexical RAG baseline,
+> an embedding-based vector RAG baseline, and a deterministic
+> GraphRAG-lite graph baseline on contradiction tracking, refusal
+> accuracy, and narrative state maintenance.
 
 ## What the benchmark is and is not
 
@@ -39,9 +40,14 @@ lists the honest limits.
 
 - **Raw RAG** is a small BM25-style lexical scorer over
   `raw_sources/`, shipped in `src/rag.py`. It is intentionally simple.
-  A real vector-RAG with embeddings would do better on some
-  questions — but the gap on synthesis / refusal questions is
-  structural, not a retrieval-quality artefact.
+- **Vector RAG** is embedding retrieval (cosine top-k over line-window
+  chunks), shipped in `src/vector_rag.py`. The committed scorecards use
+  `sentence-transformers/all-MiniLM-L6-v2`; tests and CI use a
+  deterministic hashed bag-of-words fallback so no model download is
+  required. There is no reranker and no query rewriting. Better
+  retrieval narrows the gap on lookup questions — but the gap on
+  synthesis / refusal questions is structural, not a retrieval-quality
+  artefact, and that is exactly what the five-way scorecard shows.
 - **GraphRAG-lite** is a deterministic file-based relationship graph
   derived from the wiki's existing structured indexes. **It is not
   Microsoft GraphRAG.** It does no community detection, no cluster
@@ -110,9 +116,9 @@ evals.
 
 - More cases sampled from public forensic write-ups.
 - LLM-as-judge scoring layered on top of the deterministic checks.
-- A real vector-RAG baseline (embeddings + reranker) alongside the
-  lexical one.
-- A real GraphRAG implementation as a third comparison.
+- A reranker and stronger embedding models on top of the vector-RAG
+  baseline.
+- A real GraphRAG implementation as a stronger comparison.
 - Inter-rater agreement on the `expected_best_method` labels.
 
 The project deliberately ships the simpler baselines instead so the

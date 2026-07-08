@@ -1,4 +1,4 @@
-"""Phase 5: GraphRAG-lite baseline, four-way compare/benchmark, and the
+"""Phase 5: GraphRAG-lite baseline, multi-method compare/benchmark, and the
 positioning docs/README.
 
 All tests run in mock-LLM mode.
@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 from src.benchmark_methods import METHODS, benchmark_methods
-from src.compare_all import compare_all, format_four_way
+from src.compare_all import compare_all, format_all_methods
 from src.evolve import benchmark_case_dir, evolve_case
 from src.graph import build_graph, save_graph, to_mermaid
 from src.graph.graph_builder import graph_md_path, graph_mmd_path, graph_path
@@ -112,17 +112,18 @@ def test_graph_mmd_written_to_disk(project: Path) -> None:
 # --------------------------------------------------------------------------- #
 
 
-def test_compare_all_includes_all_four_methods(project: Path) -> None:
+def test_compare_all_includes_all_methods(project: Path) -> None:
     _evolve_and_graph(project)
     result = compare_all(project, "case_002_evolving",
                          "Is this confirmed malware?")
-    # All four providers must produce a QueryAnswer.
+    # All five providers must produce a QueryAnswer.
     assert result.raw_rag.question
+    assert result.vector_rag.question
     assert result.graph_rag_lite.question
     assert result.llm_wiki.question
     assert result.hybrid.question
-    out = format_four_way(result)
-    for label in ("Raw RAG", "GraphRAG-lite", "LLM Wiki", "Hybrid"):
+    out = format_all_methods(result)
+    for label in ("Raw RAG", "Vector RAG", "GraphRAG-lite", "LLM Wiki", "Hybrid"):
         assert label in out
 
 
@@ -243,5 +244,5 @@ def test_cli_help_lists_phase5_commands() -> None:
     )
     help_text = result.stdout
     for cmd in ("graph-build", "graph-query", "graph-export",
-                "compare-all", "benchmark-methods"):
+                "compare-all", "benchmark-methods", "vector-query"):
         assert cmd in help_text, f"--help missing {cmd!r}"
