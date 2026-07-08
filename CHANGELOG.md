@@ -5,7 +5,7 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [0.5.0] — 2026-07-08
 
 ### Added
 
@@ -69,4 +69,5 @@ never published.
 - Test suite (mock LLM mode, no API key required), Ruff linting, and CI on
   Python 3.11 and 3.12.
 
+[0.5.0]: https://github.com/abs768/forensic-llm-wiki-obsidian/releases/tag/v0.5.0
 [0.4.0]: https://github.com/abs768/forensic-llm-wiki-obsidian/releases/tag/v0.4.0

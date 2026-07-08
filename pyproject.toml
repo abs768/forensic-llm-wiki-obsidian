@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "forensic-llm-wiki"
-version = "0.4.0"
+version = "0.5.0"
 description = "A markdown-first AI investigation wiki that compiles forensic evidence into an evolving, citation-backed case knowledge base."
 readme = "README.md"
 license = { file = "LICENSE" }
