@@ -68,9 +68,9 @@ def extract_entities(source: ParsedSource) -> list[Entity]:
                 v = row.get(col)
                 if v:
                     add(Entity(type="ip", value=v, appears_in=appears, citations=[cite]))
-            proc = row.get("process")
-            if proc:
-                add(Entity(type="process", value=proc, appears_in=appears, citations=[cite]))
+            row_proc = row.get("process")
+            if row_proc:
+                add(Entity(type="process", value=row_proc, appears_in=appears, citations=[cite]))
 
     elif source.kind == "registry_reg" and source.sections:
         for section in source.sections:

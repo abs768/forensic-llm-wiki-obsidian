@@ -1,5 +1,5 @@
-.PHONY: install install-live install-mcp test lint format demo evolve benchmark \
-        adversarial launch-check clean help
+.PHONY: install install-live install-mcp test coverage lint format typecheck demo \
+        evolve benchmark adversarial launch-check clean help
 
 PY ?= python
 
@@ -10,7 +10,9 @@ help:
 	@echo "  make install-live   Same, plus the optional anthropic SDK for live mode."
 	@echo "  make install-mcp    Same, plus the optional mcp SDK for the MCP server."
 	@echo "  make test           Run the test suite (mock mode, no API key needed)."
+	@echo "  make coverage       Run the test suite with a coverage report (85% floor)."
 	@echo "  make lint           Ruff check the codebase."
+	@echo "  make typecheck      Mypy the codebase."
 	@echo "  make format         Ruff format the codebase."
 	@echo "  make demo           Run examples/demo_commands.sh end-to-end."
 	@echo "  make evolve         Run the evolving case from clean state."
@@ -31,8 +33,14 @@ install-mcp:
 test:
 	$(PY) -m pytest
 
+coverage:
+	$(PY) -m pytest --cov --cov-report=term --cov-fail-under=85
+
 lint:
 	$(PY) -m ruff check .
+
+typecheck:
+	$(PY) -m mypy
 
 format:
 	$(PY) -m ruff format .
@@ -51,8 +59,9 @@ adversarial:
 	$(PY) fw.py benchmark case_003_adversarial_overclaim
 
 launch-check:
-	$(PY) -m pytest
+	$(PY) -m pytest --cov --cov-report=term --cov-fail-under=85
 	$(PY) -m ruff check .
+	$(PY) -m mypy
 	$(PY) fw.py --help > /dev/null
 	@echo "launch-check: OK"
 

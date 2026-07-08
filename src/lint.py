@@ -494,7 +494,7 @@ def format_report(report: LintReport) -> str:
         return "Lint: clean. 0 findings."
     lines: list[str] = []
     for sev in ("Critical", "High", "Medium", "Low"):
-        items = report.by_severity(sev)  # type: ignore[arg-type]
+        items = report.by_severity(sev)
         if not items:
             continue
         lines.append(f"{sev.upper()}:")

@@ -17,6 +17,7 @@ import time
 from datetime import datetime
 from pathlib import Path
 from types import TracebackType
+from typing import Literal
 
 from .schemas import IngestionLogEntry, TraceRecord, TraceStep
 from .wiki_io import fw_dir
@@ -105,7 +106,7 @@ class _StepContext:
         exc_type: type[BaseException] | None,
         exc: BaseException | None,
         tb: TracebackType | None,
-    ) -> bool:
+    ) -> Literal[False]:
         dt = int((time.perf_counter() - self.t0) * 1000)
         if exc is not None:
             self.status = "error"

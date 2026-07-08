@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
+from typing import Literal
 
 from .schemas import QueryAnswer
 from .wiki_io import WikiState, hypothesis_key, load_state
@@ -554,7 +555,7 @@ def _answer_generic(state: WikiState, question: str) -> QueryAnswer:
             f"Relevant hypothesis: '{h.title}' (confidence: {h.confidence}). "
             f"{h.inference}"
         )
-        classification = "hypothesis"
+        classification: Literal["fact", "inference", "hypothesis"] = "hypothesis"
         confidence = h.confidence
     elif matches_ioc:
         i = matches_ioc[0]

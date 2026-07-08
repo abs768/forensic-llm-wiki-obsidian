@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import sys
 from pathlib import Path
+from typing import Literal
 
 PROJECT_ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(PROJECT_ROOT))
@@ -61,7 +62,7 @@ def _case_id_from_arg(arg: str) -> str:
 
 def cmd_ingest(args: argparse.Namespace) -> int:
     case_id = _case_id_from_arg(args.case)
-    mode = "live" if args.live else "mock"
+    mode: Literal["live", "mock"] = "live" if args.live else "mock"
     report = ingest_case(
         PROJECT_ROOT,
         case_id,
