@@ -23,6 +23,7 @@ The system answers from a compiled investigation wiki, not from raw retrieval al
 | Method            | Best at                                    | Weak at                             |
 | ----------------- | ------------------------------------------ | ----------------------------------- |
 | **Raw RAG**       | Direct lookup from raw files               | No persistent case state            |
+| **Vector RAG**    | Semantic lookup beyond keyword overlap     | Same: retrieves, never reconciles   |
 | **GraphRAG-lite** | Entity relationships                       | Weak narrative / current assessment |
 | **LLM Wiki**      | Hypotheses, contradictions, evolving state | Requires schema / lint discipline   |
 | **Hybrid**        | Combining relationships + maintained state | More moving parts                   |
@@ -124,19 +125,21 @@ Benchmark scorecards are committed under [`benchmark_results/`](benchmark_result
 
 These results are from synthetic forensic cases and should be read as architecture evidence, not universal claims about all RAG or GraphRAG systems. See [`docs/threats_to_validity.md`](docs/threats_to_validity.md).
 
-### Four-way method comparison
+### Five-way method comparison
 
-`case_002_evolving`, 23 questions, 8 categories:
+`case_002_evolving`, 23 questions, 8 categories. The Vector RAG column was generated with real embeddings (`all-MiniLM-L6-v2`); everything else is deterministic.
 
-| Metric                  | Raw RAG | GraphRAG-lite | LLM Wiki |      Hybrid |
-| ----------------------- | ------: | ------------: | -------: | ----------: |
-| Passed                  |  7 / 23 |        5 / 23 |  19 / 23 | **20 / 23** |
-| Relationship coverage   |    0.60 |          0.60 |     0.80 |    **1.00** |
-| Narrative state quality |    0.14 |          0.00 |     0.71 |    **0.71** |
-| Refusal accuracy        |    0.33 |          0.00 |     0.75 |    **0.75** |
-| Contradiction misses    |       2 |             2 |        0 |       **0** |
+| Metric                  | Raw RAG | Vector RAG | GraphRAG-lite | LLM Wiki |      Hybrid |
+| ----------------------- | ------: | ---------: | ------------: | -------: | ----------: |
+| Passed                  |  7 / 23 |    10 / 23 |        5 / 23 |  19 / 23 | **20 / 23** |
+| Relationship coverage   |    0.60 |       0.60 |          0.60 |     0.80 |    **1.00** |
+| Narrative state quality |    0.14 |       0.29 |          0.00 |     0.71 |    **0.71** |
+| Refusal accuracy        |    0.25 |       0.38 |          0.00 |     0.75 |    **0.75** |
+| Contradiction misses    |       2 |          0 |             2 |        0 |       **0** |
 
 Hybrid performed best overall. LLM Wiki performed better on contradiction tracking, refusal, and current investigation assessment. GraphRAG-lite performed best on its intended niche: relationship questions.
+
+Vector RAG is the interesting control: better retrieval lifts it from 7 to 10 passes and it surfaces both sides of a contradiction (the substring checks pass), but it never reconciles them — and the refusal-accuracy and narrative-state gaps against the maintained wiki barely move. The gap is architectural, not a retrieval-quality artefact.
 
 ### Evolving case benchmark
 
@@ -207,7 +210,7 @@ lint
 report
 evolve across six evidence drops
 snapshot diff
-four-way benchmark
+five-way benchmark
 ```
 
 Expected output is documented in [`examples/demo_expected_output.md`](examples/demo_expected_output.md).
@@ -235,7 +238,7 @@ make launch-check
 ## What this is not
 
 * **Not a generic RAG chatbot.** The wiki is the product; query is a view over maintained state.
-* **Not a vector database demo.** The baseline is raw lexical RAG, not embeddings.
+* **Not a vector database demo.** There is no vector store or server; the embedding baseline computes cosine similarity in-process, and it exists to be measured against, not to win.
 * **Not a malware verdict engine.** It refuses confirmed-malware language unless the evidence supports it.
 * **Not a replacement for forensic analysts.** It helps maintain state, surface contradictions, and draft reports.
 * **Not a production SOC platform.** There is no auth, multi-user control, sandboxing, or production deployment layer.
@@ -257,14 +260,14 @@ make launch-check
 
 ### Software engineering
 
-* Modular Python CLI with 15 subcommands.
+* Modular Python CLI with 16 subcommands.
 * `fw.py` is a thin dispatcher over modules in `src/`.
 * Incremental ingestion uses a SHA-256 manifest.
 * `--dry-run`, `--force`, and changed-only ingestion are supported.
 * Structured traces, ingestion logs, and review history are written as JSONL.
 * MCP `read_wiki_page` blocks path traversal and prevents `.fw/` sidecar reads.
 * CI runs on Python 3.11 and 3.12.
-* 186 tests pass in deterministic mock mode, with 91% line coverage and an 85% floor enforced in CI.
+* 197 tests pass in deterministic mock mode, with 91% line coverage and an 85% floor enforced in CI.
 * Ruff and mypy are clean.
 * Explicit non-goals are documented in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
@@ -281,6 +284,7 @@ python fw.py ingest raw_sources/case_001 --review
 # Query the compiled wiki
 python fw.py query case_001 "Is this confirmed malware?"
 python fw.py rag-query case_001 "Is this confirmed malware?"
+python fw.py vector-query case_001 "Is this confirmed malware?"
 python fw.py compare case_001 "Is this confirmed malware?"
 
 # Lint, evaluate, and report
@@ -294,7 +298,7 @@ python fw.py evolve case_002_evolving
 python fw.py diff-snapshots case_002_evolving \
     after_step_02_registry after_step_03_defender
 
-# GraphRAG-lite and four-way comparison
+# GraphRAG-lite and five-way comparison
 python fw.py graph-build case_002_evolving
 python fw.py graph-query case_002_evolving "What is DeskRest.exe related to?"
 python fw.py graph-export case_002_evolving --format mermaid
@@ -426,7 +430,7 @@ make launch-check
 Current status:
 
 ```text
-186 tests passing
+197 tests passing
 91% line coverage (85% floor enforced in CI)
 ruff clean
 mypy clean
@@ -448,7 +452,7 @@ The test suite covers:
 * traces and ingestion logs
 * evolving-case snapshots
 * GraphRAG-lite graph build/query/export
-* four-way benchmark
+* five-way benchmark
 * MCP tools
 * path traversal protection
 * Obsidian export
@@ -465,7 +469,7 @@ See [`docs/threats_to_validity.md`](docs/threats_to_validity.md) for the full ve
 Important limitations:
 
 * The benchmark is synthetic and small.
-* The raw RAG baseline is lexical, not vector-based.
+* The vector-RAG baseline is a single embedding model (MiniLM) with cosine top-k — no reranker, no query rewriting.
 * GraphRAG-lite is a deterministic local graph baseline, not Microsoft GraphRAG.
 * Mock LLM mode differs from live LLM behavior.
 * Benchmarks use deterministic checks, not LLM-as-judge.
@@ -479,7 +483,7 @@ Important limitations:
 
 ## Future work
 
-* Add a vector-RAG baseline with embeddings and reranking.
+* Add a reranker and stronger embedding models to the vector-RAG baseline.
 * Add a full GraphRAG implementation as a stronger comparison.
 * Add live LLM smoke-test scorecards.
 * Add local-model mode for air-gapped environments.

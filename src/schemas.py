@@ -464,7 +464,7 @@ class Graph(BaseModel):
         return out
 
 
-Method = Literal["raw_rag", "graph_rag_lite", "llm_wiki", "hybrid"]
+Method = Literal["raw_rag", "vector_rag", "graph_rag_lite", "llm_wiki", "hybrid"]
 
 
 class MethodRowCheck(BaseModel):

@@ -36,6 +36,9 @@ dev = [
 live = [
     "anthropic>=0.30",
 ]
+vector = [
+    "sentence-transformers>=2.2",
+]
 mcp = [
     "mcp>=1.0",
 ]

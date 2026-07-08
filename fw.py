@@ -31,7 +31,7 @@ from src.benchmark import benchmark_case  # noqa: E402
 from src.benchmark import format_markdown as format_benchmark_md  # noqa: E402
 from src.benchmark_methods import benchmark_methods, format_method_markdown  # noqa: E402
 from src.compare import compare, format_comparison  # noqa: E402
-from src.compare_all import compare_all, format_four_way  # noqa: E402
+from src.compare_all import compare_all, format_all_methods  # noqa: E402
 from src.eval import format_summary, run_eval  # noqa: E402
 from src.evolve import benchmark_case_dir, evolve_case  # noqa: E402
 from src.graph import build_graph, graph_md_path, graph_query, save_graph, to_mermaid  # noqa: E402
@@ -50,6 +50,7 @@ from src.review import approve_review, list_reviews, load_review, reject_review 
 from src.review import format_list as format_review_list  # noqa: E402
 from src.review import format_show as format_review_show  # noqa: E402
 from src.snapshots import diff_snapshots, format_diff  # noqa: E402
+from src.vector_rag import vector_rag_query  # noqa: E402
 
 
 def _case_id_from_arg(arg: str) -> str:
@@ -102,6 +103,13 @@ def cmd_query(args: argparse.Namespace) -> int:
 def cmd_rag_query(args: argparse.Namespace) -> int:
     case_id = _case_id_from_arg(args.case)
     ans = rag_query(PROJECT_ROOT, case_id, args.question)
+    print(format_answer(ans))
+    return 0
+
+
+def cmd_vector_query(args: argparse.Namespace) -> int:
+    case_id = _case_id_from_arg(args.case)
+    ans = vector_rag_query(PROJECT_ROOT, case_id, args.question)
     print(format_answer(ans))
     return 0
 
@@ -252,7 +260,7 @@ def cmd_compare_all(args: argparse.Namespace) -> int:
         graph = build_graph(PROJECT_ROOT, case_id)
         save_graph(PROJECT_ROOT, graph)
     result = compare_all(PROJECT_ROOT, case_id, args.question)
-    print(format_four_way(result))
+    print(format_all_methods(result))
     return 0
 
 
@@ -378,6 +386,22 @@ def build_parser() -> argparse.ArgumentParser:
     p_rag.add_argument("case", help="<case_id>")
     p_rag.add_argument("question", help="The question to ask.")
     p_rag.set_defaults(func=cmd_rag_query)
+
+    p_vec = sub.add_parser(
+        "vector-query",
+        help="Run the embedding-retrieval baseline.",
+        description=(
+            "Vector retrieval over chunked raw_sources/ using cosine "
+            "similarity. Set FORENSIC_WIKI_EMBEDDINGS=local for "
+            "sentence-transformers embeddings (pip install -e '.[vector]'); "
+            "the default 'hash' backend is deterministic and dependency-free. "
+            "Better retrieval than rag-query, same architecture: no synthesis, "
+            "no contradiction handling."
+        ),
+    )
+    p_vec.add_argument("case", help="<case_id>")
+    p_vec.add_argument("question", help="The question to ask.")
+    p_vec.set_defaults(func=cmd_vector_query)
 
     p_cmp = sub.add_parser(
         "compare",

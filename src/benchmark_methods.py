@@ -1,7 +1,8 @@
-"""Four-way method benchmark: raw_rag, graph_rag_lite, llm_wiki, hybrid.
+"""Five-way method benchmark: raw_rag, vector_rag, graph_rag_lite,
+llm_wiki, hybrid.
 
 Same deterministic scoring pipeline as ``src/benchmark.py``, but every
-question runs through four providers. Two extra metrics are reported:
+question runs through five providers. Two extra metrics are reported:
 
   - ``relationship_coverage``: per provider, the pass rate on
     ``relationship_retrieval`` / ``multi_hop_relation`` questions.
@@ -29,8 +30,9 @@ from .schemas import (
     MethodBenchmarkSummary,
     MethodRowCheck,
 )
+from .vector_rag import vector_rag_query
 
-METHODS = ("raw_rag", "graph_rag_lite", "llm_wiki", "hybrid")
+METHODS = ("raw_rag", "vector_rag", "graph_rag_lite", "llm_wiki", "hybrid")
 
 _RELATIONSHIP_CATEGORIES = {"relationship_retrieval", "multi_hop_relation"}
 _NARRATIVE_CATEGORIES = {
@@ -53,6 +55,7 @@ def benchmark_methods(
     for case in cases:
         wiki_ans = answer_question(project_root, case_id, case.question)
         rag_ans = rag_query(project_root, case_id, case.question)
+        vector_ans = vector_rag_query(project_root, case_id, case.question)
         graph_ans = graph_query(project_root, case_id, case.question)
         hybrid_ans = build_hybrid_answer(
             project_root, case_id, case.question, wiki_ans, graph_ans,
@@ -61,6 +64,7 @@ def benchmark_methods(
         results: dict[str, MethodRowCheck] = {}
         for method, ans in (
             ("raw_rag", rag_ans),
+            ("vector_rag", vector_ans),
             ("graph_rag_lite", graph_ans),
             ("llm_wiki", wiki_ans),
             ("hybrid", hybrid_ans),
@@ -203,11 +207,13 @@ def format_method_markdown(summary: MethodBenchmarkSummary) -> str:
     out: list[str] = []
     out.append(f"# Method Comparison — `{summary.case_id}`\n")
     out.append(
-        "Four providers were scored against the same eval set:\n\n"
+        "Five providers were scored against the same eval set:\n\n"
         "1. **Raw RAG** — naive BM25 over raw_sources/.\n"
-        "2. **GraphRAG-lite** — answers from the derived relationship graph.\n"
-        "3. **LLM Wiki** — answers from the compiled investigation state.\n"
-        "4. **Hybrid** — wiki assessment + graph relationship context.\n"
+        "2. **Vector RAG** — embedding-similarity retrieval over chunked "
+        "raw_sources/.\n"
+        "3. **GraphRAG-lite** — answers from the derived relationship graph.\n"
+        "4. **LLM Wiki** — answers from the compiled investigation state.\n"
+        "5. **Hybrid** — wiki assessment + graph relationship context.\n"
     )
 
     head = "| Metric | " + " | ".join(_pretty(m) for m in methods) + " |"
@@ -257,6 +263,9 @@ def format_method_markdown(summary: MethodBenchmarkSummary) -> str:
         "it has both the graph context and the wiki's assessment.\n"
         "- Raw RAG is the foil. It is included to make the cost of "
         "'just retrieve' visible.\n"
+        "- Vector RAG retrieves better than Raw RAG but shares its "
+        "architecture: no maintained state, so the synthesis and refusal "
+        "gaps should persist.\n"
     )
     return "\n".join(out)
 
@@ -264,6 +273,7 @@ def format_method_markdown(summary: MethodBenchmarkSummary) -> str:
 def _pretty(m: str) -> str:
     return {
         "raw_rag": "Raw RAG",
+        "vector_rag": "Vector RAG",
         "graph_rag_lite": "GraphRAG-lite",
         "llm_wiki": "LLM Wiki",
         "hybrid": "Hybrid",

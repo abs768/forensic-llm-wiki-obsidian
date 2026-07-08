@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Vector-RAG baseline** (`src/vector_rag.py`): embedding retrieval with
+  cosine top-k over chunked raw sources, as a stronger control against the
+  lexical baseline. Real runs use `sentence-transformers/all-MiniLM-L6-v2`
+  (`pip install -e ".[vector]"`, `FORENSIC_WIKI_EMBEDDINGS=local`); tests
+  and CI use a deterministic hashed bag-of-words embedder with no model
+  download. New `vector-query` CLI command; `compare-all` and
+  `benchmark-methods` are now five-way. The committed
+  `case_002_evolving` scorecard was regenerated with real embeddings:
+  Vector RAG passes 10/23 (Raw RAG 7/23) but the refusal and
+  narrative-state gaps against the maintained wiki persist.
+
 - Coverage reporting in CI with an enforced 85% line-coverage floor
   (currently at 91%).
 - Mypy type checking in CI; the codebase is mypy-clean.
