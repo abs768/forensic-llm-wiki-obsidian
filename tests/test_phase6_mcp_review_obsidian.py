@@ -385,13 +385,6 @@ def test_readme_mentions_mcp_obsidian_review() -> None:
     assert "review" in text.lower()
 
 
-def test_project_summary_has_agent_human_section() -> None:
-    text = (REPO_ROOT / "PROJECT_SUMMARY.md").read_text()
-    assert "Agent and human workflow" in text
-    assert "MCP" in text
-    assert "Obsidian" in text
-
-
 def test_obsidian_vault_template_exists() -> None:
     t = REPO_ROOT / "examples" / "obsidian_vault_template"
     assert t.is_dir()

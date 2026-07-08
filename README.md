@@ -2,12 +2,9 @@
 
 > **Forensic LLM Wiki is a markdown-first AI investigation system that compiles raw forensic evidence into an evolving Obsidian-compatible case wiki instead of answering from raw snippets every time like traditional RAG.**
 
+[![CI](https://github.com/abs768/forensic-llm-wiki-obsidian/actions/workflows/test.yml/badge.svg)](https://github.com/abs768/forensic-llm-wiki-obsidian/actions/workflows/test.yml)
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)
-![Tests: 196 passing](https://img.shields.io/badge/tests-196%20passing-brightgreen.svg)
-![Ruff: clean](https://img.shields.io/badge/ruff-clean-success.svg)
-![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)
-![Markdown-first](https://img.shields.io/badge/markdown-first-blueviolet.svg)
-![LLM Wiki](https://img.shields.io/badge/pattern-LLM%20Wiki-purple.svg)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
@@ -44,6 +41,28 @@ The system answers from a compiled investigation wiki, not from raw retrieval al
 ---
 
 ## Architecture
+
+```mermaid
+flowchart TD
+    R[Raw Sources<br/>immutable evidence] --> I[Ingest]
+    S[Schema<br/>rules + templates + lint] --> I
+    I --> D[Structured Indexes<br/>events / entities / claims / graph]
+    I --> W[Markdown Wiki<br/>timeline / entities / iocs /<br/>hypotheses / contradictions /<br/>open_questions / final_report]
+    W --> Q[Query]
+    W --> L[Lint]
+    W --> P[Report]
+    W --> M[MCP Server]
+    W --> O[Obsidian Export]
+    D --> Q
+    D --> L
+    Q --> A[Evidence-backed Answer]
+    L --> X[Unsupported Claims /<br/>Contradictions]
+    P --> Y[Final Report Draft]
+    M --> AG[Agents]
+    O --> H[Humans]
+```
+
+On disk, that maps to:
 
 ```text
 raw_sources/       immutable evidence
@@ -241,7 +260,7 @@ make launch-check
 * Structured traces, ingestion logs, and review history are written as JSONL.
 * MCP `read_wiki_page` blocks path traversal and prevents `.fw/` sidecar reads.
 * CI runs on Python 3.11 and 3.12.
-* 196 tests pass in deterministic mock mode.
+* 186 tests pass in deterministic mock mode.
 * Ruff is clean.
 * Explicit non-goals are documented in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
@@ -400,7 +419,7 @@ make launch-check
 Current status:
 
 ```text
-196 tests passing
+186 tests passing
 ruff clean
 CI on Python 3.11 and 3.12
 mock mode; no API key required
@@ -478,20 +497,16 @@ Important limitations:
 ### Demo and evaluation
 
 * [`docs/demo_script.md`](docs/demo_script.md)
-* [`docs/demo_video_script.md`](docs/demo_video_script.md)
 * [`docs/benchmark_methodology.md`](docs/benchmark_methodology.md)
 * [`examples/live_llm_smoke_test.md`](examples/live_llm_smoke_test.md)
 
 ### Credibility
 
 * [`docs/threats_to_validity.md`](docs/threats_to_validity.md)
-* [`docs/interview_talking_points.md`](docs/interview_talking_points.md)
-* [`docs/launch_checklist.md`](docs/launch_checklist.md)
 
 ### Top-level summaries
 
 * [`CASE_STUDY.md`](CASE_STUDY.md)
-* [`PROJECT_SUMMARY.md`](PROJECT_SUMMARY.md)
 
 ---
 

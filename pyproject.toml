@@ -9,7 +9,7 @@ description = "A markdown-first AI investigation wiki that compiles forensic evi
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.11"
-authors = [{ name = "Forensic LLM Wiki contributors" }]
+authors = [{ name = "Bhavani Shankar Ajith", email = "abhavanishankar2002@gmail.com" }]
 keywords = ["forensics", "llm", "wiki", "obsidian", "rag", "markdown"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -42,8 +42,9 @@ mcp = [
 fw = "fw:main"
 
 [project.urls]
-Documentation = "https://github.com/your-org/forensic-llm-wiki#readme"
-Issues = "https://github.com/your-org/forensic-llm-wiki/issues"
+Homepage = "https://github.com/abs768/forensic-llm-wiki-obsidian"
+Documentation = "https://github.com/abs768/forensic-llm-wiki-obsidian#readme"
+Issues = "https://github.com/abs768/forensic-llm-wiki-obsidian/issues"
 
 [tool.setuptools]
 py-modules = ["fw"]

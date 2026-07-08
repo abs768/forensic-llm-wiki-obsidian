@@ -117,15 +117,6 @@ def test_obsidian_vault_uses_wiki_links() -> None:
 # --------------------------------------------------------------------------- #
 
 
-def test_project_summary_exists() -> None:
-    p = REPO_ROOT / "PROJECT_SUMMARY.md"
-    assert p.exists()
-    text = p.read_text().lower()
-    # Must cover the recruiter-friendly headings.
-    for needle in ("problem", "solution", "architecture", "limitation"):
-        assert needle in text, f"PROJECT_SUMMARY missing section about {needle!r}"
-
-
 def test_license_exists() -> None:
     p = REPO_ROOT / "LICENSE"
     assert p.exists()

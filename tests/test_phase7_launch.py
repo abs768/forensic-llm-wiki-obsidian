@@ -61,40 +61,6 @@ def test_live_llm_smoke_test_doc_exists() -> None:
     assert "Template for maintainers" in text
 
 
-def test_interview_talking_points_exist() -> None:
-    p = REPO_ROOT / "docs" / "interview_talking_points.md"
-    assert p.exists()
-    text = p.read_text().lower()
-    # Must mention every required Q section by intent. We do a tolerant
-    # substring check so minor wording changes (e.g. "Why not just GraphRAG?"
-    # vs "Why not GraphRAG?") don't break the test.
-    for needle in ("what problem does this solve",
-                   "why not traditional rag",
-                   "what is the architecture",
-                   "what was hardest",
-                   "how do you prevent hallucinations",
-                   "how does human review work"):
-        assert needle in text, f"talking points missing {needle!r}"
-    # The GraphRAG positioning question is allowed either spelling.
-    assert "why not graphrag" in text or "why not just graphrag" in text
-
-
-def test_launch_checklist_exists() -> None:
-    p = REPO_ROOT / "docs" / "launch_checklist.md"
-    assert p.exists()
-    text = p.read_text()
-    assert "launch-check" in text
-
-
-def test_demo_video_script_exists() -> None:
-    p = REPO_ROOT / "docs" / "demo_video_script.md"
-    assert p.exists()
-    text = p.read_text().lower()
-    assert "evolve" in text
-    assert "compare-all" in text
-    assert "benchmark-methods" in text or "benchmark methods" in text
-
-
 # --------------------------------------------------------------------------- #
 # Adversarial overclaim case
 # --------------------------------------------------------------------------- #
@@ -150,7 +116,7 @@ def test_wiki_refuses_adversarial_exfiltration(project: Path) -> None:
 
 
 # --------------------------------------------------------------------------- #
-# README + PROJECT_SUMMARY tighten
+# README tighten
 # --------------------------------------------------------------------------- #
 
 
@@ -173,19 +139,6 @@ def test_readme_includes_method_comparison_table() -> None:
     # Method-comparison table column headers.
     assert "Best at" in readme
     assert "Weak at" in readme
-
-
-def test_project_summary_has_resume_bullet() -> None:
-    text = (REPO_ROOT / "PROJECT_SUMMARY.md").read_text()
-    assert "Resume bullet" in text or "resume bullet" in text
-    # Resume bullet must mention every elevator-pitch phrase.
-    lower = text.lower()
-    for needle in ("forensic llm wiki",
-                   "obsidian",
-                   "rag",
-                   "graphrag",
-                   "hybrid"):
-        assert needle in lower, f"resume bullet missing concept {needle!r}"
 
 
 # --------------------------------------------------------------------------- #
@@ -261,9 +214,6 @@ def test_committed_adversarial_results_exist() -> None:
     "obsidian_workflow.md",
     "human_review.md",
     "threats_to_validity.md",
-    "interview_talking_points.md",
-    "demo_video_script.md",
-    "launch_checklist.md",
 ])
 def test_readme_links_to_each_phase7_doc(doc: str) -> None:
     readme = (REPO_ROOT / "README.md").read_text()
