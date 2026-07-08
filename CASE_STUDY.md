@@ -219,7 +219,7 @@ analyst's overclaim.
   `--dry-run` previews unified diffs without writing.
 - **Stable IDs for events / entities / claims** across re-ingest so
   citations from the final report don't break.
-- **196 tests** across 17 files, all in mock mode. `pytest` runs in
+- **186 tests** across 21 files, all in mock mode. `pytest` runs in
   ~6 s. **Ruff clean.** **CI on Python 3.11 and 3.12** via GitHub
   Actions: `ruff check`, `pytest`, plus a smoke test of the demo flow.
 - **Path traversal blocked.** The MCP `read_wiki_page` tool resolves
@@ -323,7 +323,7 @@ Specific friction points:
 git clone <repo> && cd forensic-llm-wiki
 python3.11 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"
-pytest                                             # 196 tests, mock mode
+pytest                                             # 186 tests, mock mode
 ruff check .
 python fw.py evolve case_002_evolving              # eval climbs 2 → 16
 python fw.py benchmark case_002_evolving           # two-way scorecard

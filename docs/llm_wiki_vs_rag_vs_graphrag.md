@@ -69,4 +69,4 @@ benchmark — see `docs/threats_to_validity.md`.
 - `docs/benchmark_methodology.md` — exactly how scoring works.
 - `docs/threats_to_validity.md` — what these results do and do not
   generalise to.
-- `PROJECT_SUMMARY.md` — recruiter-friendly one-pager.
+- `CASE_STUDY.md` — the full design narrative.

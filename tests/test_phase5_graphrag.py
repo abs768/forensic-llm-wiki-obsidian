@@ -1,5 +1,5 @@
 """Phase 5: GraphRAG-lite baseline, four-way compare/benchmark, and the
-positioning docs/README/PROJECT_SUMMARY.
+positioning docs/README.
 
 All tests run in mock-LLM mode.
 """
@@ -200,7 +200,7 @@ def test_hybrid_is_at_least_as_good_as_components_overall(project: Path) -> None
 
 
 # --------------------------------------------------------------------------- #
-# Docs / README / PROJECT_SUMMARY
+# Docs / README
 # --------------------------------------------------------------------------- #
 
 
@@ -229,12 +229,6 @@ def test_readme_includes_why_not_just_graphrag_section() -> None:
     readme = (REPO_ROOT / "README.md").read_text()
     assert "Why not just GraphRAG?" in readme
     assert "compare-all" in readme
-
-
-def test_project_summary_includes_graphrag_section() -> None:
-    text = (REPO_ROOT / "PROJECT_SUMMARY.md").read_text()
-    assert "GraphRAG" in text
-    assert "investigation state" in text
 
 
 # --------------------------------------------------------------------------- #

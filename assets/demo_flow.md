@@ -20,16 +20,6 @@ The script in the repo. Runs end-to-end without API keys.
 Expected output examples live in
 `examples/demo_expected_output.md`.
 
-## 3-minute demo — `docs/demo_video_script.md`
-
-The recordable version, scene by scene with voiceover. Adds:
-
-- Opening README hook.
-- Obsidian export + graph view.
-- The four-way `compare-all` and `benchmark-methods` scorecards.
-- The adversarial overclaim case (Phase 7).
-- The review-queue catching a risky update.
-
 ## 5-minute live walkthrough — `docs/demo_script.md`
 
 The talking script for in-person walkthroughs. Each step is a single
@@ -51,6 +41,6 @@ command and a one-sentence explanation.
 
 1. README first screen.
 2. `assets/method_comparison_table.md` numbers.
-3. `PROJECT_SUMMARY.md` resume bullet.
+3. `CASE_STUDY.md` for the full narrative.
 
 That's the whole pitch.

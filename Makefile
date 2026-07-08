@@ -9,7 +9,7 @@ help:
 	@echo "  make install        Install runtime + dev dependencies (editable)."
 	@echo "  make install-live   Same, plus the optional anthropic SDK for live mode."
 	@echo "  make install-mcp    Same, plus the optional mcp SDK for the MCP server."
-	@echo "  make test           Run the test suite (163+ tests, mock mode)."
+	@echo "  make test           Run the test suite (mock mode, no API key needed)."
 	@echo "  make lint           Ruff check the codebase."
 	@echo "  make format         Ruff format the codebase."
 	@echo "  make demo           Run examples/demo_commands.sh end-to-end."
