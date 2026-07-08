@@ -6,6 +6,10 @@
 ![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
+![Demo: ingest, query, and evolve a forensic case from the terminal](assets/demo.gif)
+
+*Ingest raw evidence, query the maintained case state with citations, and replay six evidence drops — the eval score climbs from 2/16 to 16/16 as the wiki compounds knowledge. Runs entirely in mock mode, no API key.*
+
 ---
 
 ## Thesis
@@ -359,6 +363,8 @@ examples/obsidian_vault_case_002_evolving/
 ```
 
 The exported vault contains markdown pages, `graph.mmd`, and an orientation README. Internal `.fw/` sidecar files are not exported.
+
+![Exported case vault in Obsidian graph view — the index page links out to timeline, entities, IOCs, hypotheses, contradictions, and the final report](assets/obsidian_graph.png)
 
 Docs:
 
