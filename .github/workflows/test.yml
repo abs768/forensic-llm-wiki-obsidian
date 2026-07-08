@@ -32,10 +32,22 @@ jobs:
       - name: Ruff check
         run: python -m ruff check .
 
-      - name: Run tests
+      - name: Mypy
+        run: python -m mypy
+
+      - name: Run tests with coverage
         env:
           FORENSIC_WIKI_LLM: mock
-        run: python -m pytest -q
+        run: |
+          set -o pipefail
+          python -m pytest -q --cov --cov-report=term --cov-fail-under=85 \
+            | tee pytest-coverage.txt
+          {
+            echo '### Coverage'
+            echo '```'
+            tail -40 pytest-coverage.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Smoke-test the demo flow
         env:

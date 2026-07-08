@@ -228,8 +228,8 @@ def format_evolution_report(result: EvolutionResult) -> str:
 
         out.append("**Contradictions added:**")
         if step.new_contradictions:
-            for c in step.new_contradictions:
-                out.append(f"- {c}")
+            for contra in step.new_contradictions:
+                out.append(f"- {contra}")
         else:
             out.append("- _(none)_")
         out.append("")

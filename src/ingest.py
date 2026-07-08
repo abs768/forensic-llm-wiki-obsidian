@@ -441,9 +441,9 @@ def _rebase_paths(facts: ExtractedFacts, project_root: Path) -> None:
         h.contradicting_evidence = [
             _fix_in_evidence_string(s, project_root) for s in h.contradicting_evidence
         ]
-    for c in facts.contradictions:
-        c.claim_a = _fix_in_evidence_string(c.claim_a, project_root)
-        c.claim_b = _fix_in_evidence_string(c.claim_b, project_root)
+    for contra in facts.contradictions:
+        contra.claim_a = _fix_in_evidence_string(contra.claim_a, project_root)
+        contra.claim_b = _fix_in_evidence_string(contra.claim_b, project_root)
     # Open questions are plain strings, nothing to rebase.
     _ = rel
 

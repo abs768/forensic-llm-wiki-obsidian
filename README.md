@@ -264,8 +264,8 @@ make launch-check
 * Structured traces, ingestion logs, and review history are written as JSONL.
 * MCP `read_wiki_page` blocks path traversal and prevents `.fw/` sidecar reads.
 * CI runs on Python 3.11 and 3.12.
-* 186 tests pass in deterministic mock mode.
-* Ruff is clean.
+* 186 tests pass in deterministic mock mode, with 91% line coverage and an 85% floor enforced in CI.
+* Ruff and mypy are clean.
 * Explicit non-goals are documented in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ---
@@ -419,6 +419,7 @@ Docs:
 ```bash
 pytest
 ruff check .
+mypy
 make launch-check
 ```
 
@@ -426,10 +427,14 @@ Current status:
 
 ```text
 186 tests passing
+91% line coverage (85% floor enforced in CI)
 ruff clean
+mypy clean
 CI on Python 3.11 and 3.12
 mock mode; no API key required
 ```
+
+Pre-commit hooks are configured in [`.pre-commit-config.yaml`](.pre-commit-config.yaml) — run `pre-commit install` after cloning.
 
 The test suite covers:
 

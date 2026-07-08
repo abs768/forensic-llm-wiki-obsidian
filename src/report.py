@@ -132,8 +132,11 @@ def _render(state: WikiState) -> str:
     lines.append("## Contradictions\n")
     if not state.contradictions:
         lines.append("- _none_")
-    for c in sorted(state.contradictions.values(), key=lambda c: c.title):
-        lines.append(f"- **{c.title}** — Claim A: {c.claim_a} / Claim B: {c.claim_b} ({c.status})")
+    for contra in sorted(state.contradictions.values(), key=lambda c: c.title):
+        lines.append(
+            f"- **{contra.title}** — Claim A: {contra.claim_a} / "
+            f"Claim B: {contra.claim_b} ({contra.status})"
+        )
     lines.append("")
 
     lines.append("## Recommended Next Steps\n")

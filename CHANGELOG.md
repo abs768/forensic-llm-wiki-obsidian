@@ -5,6 +5,25 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- Coverage reporting in CI with an enforced 85% line-coverage floor
+  (currently at 91%).
+- Mypy type checking in CI; the codebase is mypy-clean.
+- Pre-commit configuration (`ruff check`, whitespace and file hygiene hooks).
+- `make coverage` and `make typecheck` targets; `make launch-check` now also
+  runs mypy and the coverage floor.
+- Terminal demo GIF and Obsidian graph-view screenshot in the README.
+
+### Fixed
+
+- Fourteen type errors surfaced by mypy: loop-variable shadowing in
+  `ingest`, `report`, `evolve`, and `entity_extractor`; missing `None`
+  narrowing in `claim_extractor`; and over-wide `str` types where the
+  schemas expect literal types (`manifest`, `query`, `fw`, `tracing`).
+
 ## [0.4.0] — 2026-07-07
 
 First public release. Versions before 0.4.0 were internal iterations and were

@@ -12,6 +12,7 @@ from __future__ import annotations
 
 from datetime import datetime
 from pathlib import Path
+from typing import Literal
 
 from .schemas import Manifest, ManifestEntry
 from .wiki_io import fw_dir
@@ -47,7 +48,7 @@ def record_processed(
     sha: str,
     pages_touched: list[str],
     *,
-    status: str = "processed",
+    status: Literal["processed", "skipped", "error", "pending"] = "processed",
 ) -> ManifestEntry:
     entry = ManifestEntry(
         source_path=source_path,

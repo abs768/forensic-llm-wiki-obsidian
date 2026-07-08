@@ -315,7 +315,7 @@ def extract_contradictions(
         detections = _first_match(r"Detections\s*:\s*([\d]+)\s*/\s*([\d]+)",
                                   source.text)
         inconclusive = "unknown" in verdict.lower() or "inconclusive" in verdict.lower()
-        zero_dets = bool(detections) and detections.startswith("0")
+        zero_dets = detections is not None and detections.startswith("0")
         if inconclusive or zero_dets:
             out.append(Contradiction(
                 title="Investigator malware suspicion vs. inconclusive hash reputation",
