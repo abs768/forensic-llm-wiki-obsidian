@@ -5,6 +5,23 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- First recorded live-LLM smoke test (`examples/live_runs/`): full run
+  against `claude-sonnet-4-6` on the evolving and adversarial cases.
+  Refusal discipline, analyst-claim attribution, and the contradictions
+  ledger all held with a real model in the loop.
+
+### Fixed
+
+- Live ingest no longer crashes when the model returns entity/IOC types
+  outside the schema vocabulary: the extraction prompt now enumerates
+  the allowed types, and `normalize_llm_types()` coerces any remaining
+  unknown labels to `other` with a note recording the original label.
+  Found by the live smoke test on its first API call.
+
 ## [0.5.0] — 2026-07-08
 
 ### Added

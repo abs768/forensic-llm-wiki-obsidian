@@ -44,9 +44,9 @@ outside the JSON object.
 SCHEMA_HINT = """\
 {
   "source_path": "<path>",
-  "entities": [{"type": "...", "value": "...", "appears_in": ["..."], "related": ["..."], "citations": [{"kind": "source", "target": "..."}]}],
+  "entities": [{"type": "process|file|user|host|ip|domain|registry_key|command|hash|url|other", "value": "...", "appears_in": ["..."], "related": ["..."], "citations": [{"kind": "source", "target": "..."}]}],
   "events": [{"timestamp": "...", "description": "...", "citation": {"kind": "source", "target": "..."}}],
-  "iocs": [{"artifact": "...", "type": "...", "first_seen": "...", "source": "...", "confidence": "Low|Medium|High|Confirmed", "reason": "...", "related": ["..."]}],
+  "iocs": [{"artifact": "...", "type": "process|file|user|host|ip|domain|registry_key|command|hash|url|other", "first_seen": "...", "source": "...", "confidence": "Low|Medium|High|Confirmed", "reason": "...", "related": ["..."]}],
   "hypotheses": [{"title": "...", "confidence": "Low|Medium|High|Confirmed", "facts": ["..."], "inference": "...", "supporting_evidence": ["..."], "contradicting_evidence": ["..."], "open_questions": ["..."], "next_steps": ["..."]}],
   "contradictions": [{"title": "...", "claim_a": "...", "claim_b": "...", "status": "..."}],
   "open_questions": ["..."],
