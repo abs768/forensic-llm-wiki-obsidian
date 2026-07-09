@@ -485,7 +485,7 @@ Important limitations:
 
 * Add a reranker and stronger embedding models to the vector-RAG baseline.
 * Add a full GraphRAG implementation as a stronger comparison.
-* Add live LLM smoke-test scorecards.
+* Add more recorded live-run scorecards across models (first one: [`examples/live_runs/`](examples/live_runs/)).
 * Add local-model mode for air-gapped environments.
 * Add forensic parsers for EVTX, MFT, prefetch, and PCAP.
 * Add an Obsidian plugin for in-place ingest.

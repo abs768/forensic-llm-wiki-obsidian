@@ -106,13 +106,18 @@ get tested in CI.
 
 ## Example recorded run
 
+Recorded runs live under [`examples/live_runs/`](live_runs/). The first
+one is [`2026-07-09_claude-sonnet-4-6.md`](live_runs/2026-07-09_claude-sonnet-4-6.md) —
+it caught a real bug in the live extraction path (out-of-vocabulary
+entity types crashing ingest) and verified that refusal discipline and
+the contradictions ledger hold with a real model.
+
 > **Template for maintainers to fill after running with a real model.**
 >
-> The repo does **not** currently contain saved live outputs. Mock-mode
-> runs are deterministic; live outputs depend on the model version,
-> temperature, system prompt, and the chunk of evidence sent in a given
-> call, so any saved snippet here would risk being misread as
-> "guaranteed behaviour".
+> Mock-mode runs are deterministic; live outputs depend on the model
+> version, temperature, system prompt, and the chunk of evidence sent
+> in a given call, so any saved snippet here would risk being misread
+> as "guaranteed behaviour".
 >
 > Suggested format if you decide to record one:
 >

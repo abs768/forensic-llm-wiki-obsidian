@@ -16,14 +16,43 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
-from typing import Literal
+from typing import Literal, get_args
 
 from . import claim_extractor, entity_extractor
 from .parsers import parse
 from .prompts import SCHEMA_HINT, SYSTEM_PROMPT, extraction_prompt
-from .schemas import IOC, ExtractedFacts, Hypothesis
+from .schemas import IOC, EntityType, ExtractedFacts, Hypothesis
 
 Mode = Literal["mock", "live"]
+
+_ALLOWED_ENTITY_TYPES = set(get_args(EntityType))
+
+
+def normalize_llm_types(data: dict) -> dict:
+    """Coerce out-of-vocabulary entity/IOC types from a live LLM to 'other'.
+
+    Live models occasionally invent type labels outside the schema's
+    vocabulary (e.g. 'directory', 'suspicious_executable'). Rather than
+    failing the whole ingest, coerce them to 'other' and record the
+    original label in the extraction notes so nothing is silently lost.
+    Near-misses that only differ in case or spacing are mapped to the
+    canonical spelling instead.
+    """
+    for key in ("entities", "iocs"):
+        for item in data.get(key) or []:
+            if not isinstance(item, dict):
+                continue
+            original = item.get("type", "")
+            canonical = str(original).strip().lower().replace(" ", "_")
+            if canonical in _ALLOWED_ENTITY_TYPES:
+                item["type"] = canonical
+            else:
+                item["type"] = "other"
+                data.setdefault("notes", []).append(
+                    f"live extraction: unknown {key[:-1]} type "
+                    f"{original!r} coerced to 'other'"
+                )
+    return data
 
 
 class LLMClient:
@@ -93,7 +122,7 @@ class LLMClient:
         data = json.loads(raw)
         # Always anchor the source path to what we read locally.
         data["source_path"] = str(path)
-        facts = ExtractedFacts.model_validate(data)
+        facts = ExtractedFacts.model_validate(normalize_llm_types(data))
 
         # Live mode still benefits from the deterministic contradiction
         # detector — it knows the prior wiki state.
